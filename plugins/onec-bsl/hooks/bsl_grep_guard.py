@@ -101,8 +101,8 @@ class Segment:
 
 def load_settings(cwd: str) -> Settings:
     project_dir = os.environ.get("CLAUDE_PROJECT_DIR") or find_git_root(cwd) or cwd
-    patterns = list(DEFAULT_ROOTS)
-    concrete = list(DEFAULT_CONCRETE_ROOTS)
+    patterns: list[str] = list(DEFAULT_ROOTS)
+    concrete: list[str] = list(DEFAULT_CONCRETE_ROOTS)
     use_marker = True
     cfg_path = os.path.join(project_dir, CONFIG_REL)
     if os.path.isfile(cfg_path):
@@ -228,16 +228,53 @@ def resolve(path: str, cwd: str) -> str:
 REDIRECT_CHARS = set("<>")
 
 
+HEREDOC_RE = re.compile(r"<<-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1")
+
+
+def lex_line(line: str) -> list[str]:
+    lexer = shlex.shlex(line, posix=True, punctuation_chars=";&|()<>")
+    lexer.whitespace_split = True
+    lexer.commenters = ""
+    return list(lexer)
+
+
+def logical_lines(command: str) -> list[str]:
+    """Строки команды без тел heredoc; строка с незакрытой кавычкой
+    склеивается со следующими (многострочный аргумент, например `-m "..."`)."""
+    lines = command.replace("\\\n", " ").split("\n")
+    result: list[str] = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        i += 1
+        while True:
+            try:
+                lex_line(line)
+                break
+            except ValueError:
+                if i >= len(lines):
+                    break  # кавычка так и не закрылась — разберём мягко
+                line += "\n" + lines[i]
+                i += 1
+        result.append(line)
+        for match in HEREDOC_RE.finditer(line):
+            delimiter = match.group(2)
+            while i < len(lines) and lines[i].strip() != delimiter:
+                i += 1  # тело heredoc — данные, а не команды
+            i += 1
+    return result
+
+
 def tokenize(command: str) -> list[str]:
     """Разбить команду на слова и операторы, отбросив перенаправления."""
     tokens: list[str] = []
-    for line_no, line in enumerate(command.replace("\\\n", " ").split("\n")):
+    for line_no, line in enumerate(logical_lines(command)):
         if line_no:
             tokens.append("\n")
-        lexer = shlex.shlex(line, posix=True, punctuation_chars=";&|()<>")
-        lexer.whitespace_split = True
-        lexer.commenters = ""
-        raw = list(lexer)
+        try:
+            raw = lex_line(line)
+        except ValueError:
+            raw = [part.strip("'\"") for part in line.split()]
         i = 0
         while i < len(raw):
             tok = raw[i]

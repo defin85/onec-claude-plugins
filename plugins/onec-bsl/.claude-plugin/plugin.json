@@ -1,7 +1,7 @@
 {
   "name": "onec-bsl",
   "displayName": "1C BSL navigation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Навигация по исходникам 1С через bsl-analyzer: LSP-сервер BSL, хук против широкого grep по выгрузкам и навык маршрутизации по виду факта",
   "author": {
     "name": "defin85",

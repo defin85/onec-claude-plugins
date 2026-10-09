@@ -129,7 +129,25 @@ class GuardTest(unittest.TestCase):
         self.assertDenied(self.bash("rg Тест src/cf 2>/dev/null | head -5"))
         self.assertDenied(self.bash("bash -c 'rg Тест src/cf'"))
 
+    def test_multiline_quoted_argument_then_search(self):
+        cmd = 'git commit -q -m "fix: строка\n\nтело с апострофом don\'t" && rg Тест src/cf'
+        self.assertDenied(self.bash(cmd))
+
     # --- разрешения
+
+    def test_multiline_quoted_argument_is_not_internal_error(self):
+        self.assertIsNone(self.bash('git commit -m "заголовок\n\nтело\n\nCo-Authored-By: X"'))
+
+    def test_heredoc_body_is_data(self):
+        cmd = "python3 - <<'PY'\nprint('rg Тест src/cf')\nx = \"it's\"\nPY\necho done"
+        self.assertIsNone(self.bash(cmd))
+
+    def test_search_after_heredoc_is_checked(self):
+        cmd = "cat > /tmp/x <<'EOF'\nit's text\nEOF\nrg Тест src/cf"
+        self.assertDenied(self.bash(cmd))
+
+    def test_unclosed_quote_is_not_internal_error(self):
+        self.assertIsNone(self.bash("echo \"не закрыта"))
 
     def test_allows_single_file(self):
         self.assertIsNone(self.bash(f"rg -n Тест {self.module}"))
@@ -179,6 +197,7 @@ class GuardTest(unittest.TestCase):
 
     def test_fail_open_on_broken_json(self):
         result = self.run_hook(None, raw="{not json")
+        assert result is not None
         self.assertIn("systemMessage", result)
         self.assertNotIn("hookSpecificOutput", result)
 
@@ -186,11 +205,11 @@ class GuardTest(unittest.TestCase):
         (self.project / ".claude").mkdir()
         (self.project / ".claude" / "onec-bsl.json").write_text("{", encoding="utf-8")
         result = self.bash("rg Тест src/cf")
+        assert result is not None
         self.assertIn("systemMessage", result)
 
-    def test_unbalanced_quotes_fail_open(self):
-        result = self.bash("rg 'Тест src/cf")
-        self.assertIn("systemMessage", result)
+    def test_unbalanced_quotes_parsed_softly(self):
+        self.assertDenied(self.bash("rg 'Тест src/cf"))
 
     def test_other_tools_ignored(self):
         self.assertIsNone(self.run_hook({"tool_name": "Read", "cwd": str(self.project),
