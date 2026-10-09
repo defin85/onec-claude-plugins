@@ -1,0 +1,17 @@
+{
+  "name": "onec-claude-plugins",
+  "description": "Плагины Claude Code для разработки на 1С:Предприятие (BSL)",
+  "owner": {
+    "name": "defin85",
+    "url": "https://github.com/defin85"
+  },
+  "plugins": [
+    {
+      "name": "onec-bsl",
+      "source": "./plugins/onec-bsl",
+      "description": "LSP-сервер BSL (bsl-analyzer-app), запрет широкого grep по выгрузкам 1С и навык bsl-navigation",
+      "category": "development",
+      "tags": ["1c", "bsl", "lsp"]
+    }
+  ]
+}

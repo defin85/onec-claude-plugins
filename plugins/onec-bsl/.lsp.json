@@ -1,0 +1,12 @@
+{
+  "bsl-analyzer": {
+    "command": "bsl-analyzer-app",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".bsl": "bsl"
+    },
+    "startupTimeout": 60000,
+    "shutdownTimeout": 10000,
+    "maxRestarts": 3
+  }
+}

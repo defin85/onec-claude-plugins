@@ -1,0 +1,17 @@
+{
+  "description": "onec-bsl: запрет широкого grep/rg по выгрузкам 1С",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/bsl_grep_guard.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

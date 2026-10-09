@@ -1,0 +1,14 @@
+{
+  "name": "onec-bsl",
+  "displayName": "1C BSL navigation",
+  "version": "0.2.0",
+  "description": "Навигация по исходникам 1С через bsl-analyzer: LSP-сервер BSL, хук против широкого grep по выгрузкам и навык маршрутизации по виду факта",
+  "author": {
+    "name": "defin85",
+    "url": "https://github.com/defin85"
+  },
+  "homepage": "https://github.com/defin85/onec-claude-plugins",
+  "repository": "https://github.com/defin85/onec-claude-plugins",
+  "license": "MIT",
+  "keywords": ["1c", "bsl", "lsp", "bsl-analyzer"]
+}
