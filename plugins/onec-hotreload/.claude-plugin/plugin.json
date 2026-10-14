@@ -1,0 +1,14 @@
+{
+  "name": "onec-hotreload",
+  "displayName": "1C BSL hot reload",
+  "version": "0.1.0",
+  "description": "Горячая замена модулей BSL в 1С:Предприятии (rphost и 1cv8) без перезапуска процессов и сеансов",
+  "author": {
+    "name": "defin85",
+    "url": "https://github.com/defin85"
+  },
+  "homepage": "https://github.com/defin85/onec-claude-plugins",
+  "repository": "https://github.com/defin85/onec-claude-plugins",
+  "license": "MIT",
+  "keywords": ["1c", "bsl", "hotreload", "rphost", "1cv8", "runtime"]
+}

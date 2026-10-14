@@ -12,6 +12,13 @@
       "description": "LSP-сервер BSL (bsl-analyzer-app), запрет широкого grep по выгрузкам 1С и навык bsl-navigation",
       "category": "development",
       "tags": ["1c", "bsl", "lsp"]
+    },
+    {
+      "name": "onec-hotreload",
+      "source": "./plugins/onec-hotreload",
+      "description": "Горячая замена модулей BSL в 1С:Предприятии (rphost и 1cv8) без перезапуска процессов и сеансов",
+      "category": "development",
+      "tags": ["1c", "bsl", "hotreload", "rphost", "1cv8", "runtime"]
     }
   ]
 }

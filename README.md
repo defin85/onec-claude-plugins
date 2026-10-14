@@ -7,12 +7,14 @@ Marketplace плагинов Claude Code для разработки на 1С:П
 | Плагин | Назначение |
 |---|---|
 | [onec-bsl](plugins/onec-bsl/README.md) | LSP-сервер BSL (`bsl-analyzer-app`), запрет широкого grep по выгрузкам 1С, навык `bsl-navigation` |
+| [onec-hotreload](plugins/onec-hotreload/README.md) | Горячая замена модулей BSL в 1С:Предприятии (`rphost` и `1cv8`), in-place патч запросов, навык `1c-hotreload` |
 
 ## Требования
 
-- `bsl-analyzer-app` в `PATH`. Устанавливается отдельно и в этот репозиторий не входит. Без него LSP-сервер не запустится; хук и навык работают и без него.
-- `python3` (3.10+) для хука; только стандартная библиотека.
-- Claude Code с поддержкой плагинов и LSP-серверов в плагинах.
+- `bsl-analyzer-app` в `PATH` для плагина `onec-bsl` (LSP).
+- `python3` (3.10+) для хуков и утилит; только стандартная библиотека.
+- Linux x86_64 и платформа 1С 8.3.27 для плагина `onec-hotreload` (live runtime).
+- Claude Code с поддержкой плагинов.
 
 ## Установка
 
@@ -20,8 +22,8 @@ Marketplace плагинов Claude Code для разработки на 1С:П
 
 ```bash
 claude plugin marketplace add defin85/onec-claude-plugins
-claude plugin install onec-bsl@onec-claude-plugins            # для пользователя
-claude plugin install onec-bsl@onec-claude-plugins -s project # только для текущего проекта (.claude/settings.json)
+claude plugin install onec-bsl@onec-claude-plugins            # навигация и LSP
+claude plugin install onec-hotreload@onec-claude-plugins      # горячая замена BSL
 ```
 
 Или внутри сессии Claude Code:
